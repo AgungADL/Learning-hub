@@ -1,31 +1,43 @@
 <template>
-    <h3>{{ slug }} Course</h3>
-    <p>{{ slug }}</p>
-    <button @click="back">
-        Back
-    </button>
+    <div v-if="currentCourse">
+        <h2>{{ currentCourse.label }}</h2>
+        <p>{{ currentCourse.description }}</p>
+        <button @click="back">Back</button>
+    </div>
+    <p v-else>Course tidak ditemukan</p>
 </template>
 
 <script setup lang="ts">
 const route = useRoute();
 const router = useRouter();
 
+interface DetailCourse {
+    name: string,
+    label: string,
+    description: string
+}
+
 const slug = ref(route.params.slug);
 
-const dataCourses = [
+const detailCourses: DetailCourse[] = [
     {
         'name': 'vue',
-        'text': 'Learn how to build front-end environment with Vue 3'
+        'label': 'Vue 3',
+        'description': 'Learn how to build front-end environment with Vue 3'
     },
     {
         'name': 'nuxt',
-        'text': 'Learn how to build full-stack applications with Nuxt 4'
+        'label': 'Nuxt 4',
+        'description': 'Learn how to build full-stack applications with Nuxt 4'
     },
     {
         'name': 'laravel',
-        'text': 'Learn how to build full-stack applications with Laravel 11'
+        'label': 'Laravel 11',
+        'description': 'Learn how to build full-stack applications with Laravel 11'
     }
 ];
+
+const currentCourse = detailCourses.find(item => item.name === slug.value);
 
 const back = () => {
     router.back()
