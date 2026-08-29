@@ -9,11 +9,7 @@
 </template>
 
 <script setup lang="ts">
-interface Course {
-    slug: string,
-    name: string,
-    description: string
-}
+import type { Course } from '~/composables/useCourses'
 
 defineProps<{
     course: Course

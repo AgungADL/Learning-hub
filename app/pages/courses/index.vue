@@ -1,6 +1,9 @@
 <template>
     <p>Silahkan pilih course yang anda mau perdalami.</p>
-    <div class="card-container">
+
+    <div v-if="pending">Loading...</div>
+    <div v-else-if="error">Terjadi kesalahan: {{ error.message }}</div>
+    <div v-else class="card-container">
         <CourseCard 
             v-for="course in courses"
             :key="course.slug"
@@ -11,25 +14,10 @@
 </template>
 
 <script setup lang="ts">
-const router = useRouter()
+import { useRouter } from 'vue-router';
 
-const courses = [
-    {
-        slug: 'vue',
-        name: 'Vue 3',
-        description: 'Learn Vue Fundamentals'
-    },
-    {
-        slug: 'nuxt',
-        name: 'Nuxt 3',
-        description: 'Learn Nuxt Fundamentals'
-    },
-    {
-        slug: 'laravel',
-        name: 'Laravel 3',
-        description: 'Learn Laravel Fundamentals'
-    }
-]
+const router = useRouter()
+const { courses, pending, error } = useCourses() 
 
 function handleViewCourse(slug: string) {
     router.push(`/courses/${slug}`);

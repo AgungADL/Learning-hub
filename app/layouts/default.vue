@@ -13,7 +13,8 @@
 const navs = [
     { 'label': 'Home', 'to': '/' },
     { 'label': 'Courses', 'to': '/courses' },
-    { 'label': 'Profile', 'to': '/profile' }
+    { 'label': 'Profile', 'to': '/profile' },
+    { 'label': 'Testing', 'to': '/testing' }
 ]
 
 const isPipeShow = (index: number) => {
