@@ -9,8 +9,9 @@ export const useCourses = () => {
     const { data, pending, error } = useFetch<{ courses: Course[] }>('/api/courses');
     const courses = computed(() => data.value?.courses || []);
 
-    const getCourse = (slug: string) => {
-        return courses.value.find(course => course.slug === slug)
+    const getCourse = async (slug: string) => {
+        const data = await $fetch<{ course: Course }>(`/api/courses/${slug}`)
+        return data.course
     }
 
     return { courses, pending, error, getCourse }

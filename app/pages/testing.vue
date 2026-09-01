@@ -1,12 +1,19 @@
 <template>
     <div class="card">
         <h3>Playground</h3>
-        <pre>{{ data }}</pre>
+        <button @click="submit">add</button>
     </div>
 </template>
 
 <script setup lang="ts">
-const { data } = await useFetch('/api/courses')
+async function submit() {
+    const { body }: any = await $fetch('/api/courses', {
+        method: 'post',
+        body: { test: 123, makan: 'minum' }
+    })
+
+    console.log('body nih bos', body)
+}
 </script>
 
 <style scoped>
