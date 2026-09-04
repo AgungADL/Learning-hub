@@ -5,8 +5,15 @@ export interface Course {
     descriptionPreview: string,
 }
 
+export interface CourseResponse {
+    message: string,
+    course: Course
+}
+
 export const useCourses = () => {
-    const { data, pending, error } = useFetch<{ courses: Course[] }>('/api/courses');
+    const { data, pending, error } = useFetch<{ courses: Course[] }>('/api/courses', {
+        key: 'courses'
+    });
     const courses = computed(() => data.value?.courses || []);
 
     const getCourse = async (slug: string) => {

@@ -1,5 +1,5 @@
 <template>
-    <h3>Create Course</h3>
+    <h3>Edit Course</h3>
     <form @submit.prevent="submitForm">
         <div>
             <label>Name</label>
@@ -32,15 +32,24 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import type { CourseResponse } from '~/composables/useCourses'
+import { useRoute, useRouter } from 'vue-router';
+import type { Course, CourseResponse } from '~/composables/useCourses'
 
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
+const { getCourse } = useCourses();
+
+const slug = String(route.params.slug);
+
+const { data: currentCourse } = await useAsyncData<Course>(
+    `current-${slug}`,
+    () => getCourse(slug)
+)
 
 const form = reactive({
-    name: '',
-    description: '',
-    descriptionPreview: '',
+    name: currentCourse.value?.name,
+    description: currentCourse.value?.description,
+    descriptionPreview: currentCourse.value?.descriptionPreview,
 })
 
 const pending = ref(false)
@@ -53,8 +62,8 @@ const submitForm = async () => {
     success.value = null
 
     try {
-        const res = await $fetch<CourseResponse>('/api/courses', {
-            method: 'POST',
+        const res = await $fetch<CourseResponse>(`/api/courses/${slug}`, {
+            method: 'PUT',
             body: form
         })
         success.value = res.message
@@ -62,9 +71,11 @@ const submitForm = async () => {
         form.name = ''
         form.description = ''
         form.descriptionPreview = ''
-        router.push('/courses')
+
+        await refreshNuxtData('courses')
+        router.push(`/courses/${res.course.slug}`)
     } catch (err: any) {
-        error.value = err.data.statusMessage || 'Create new course failed'
+        error.value = err.data.statusMessage || 'Update course failed'
     } finally {
         pending.value = false
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <h2>{{ course.name }}</h2>
-        <p>{{ course.description }}</p>
+        <p>{{ course.descriptionPreview }}</p>
         <button @click="viewCourse(course.slug)">
             View Course
         </button>
